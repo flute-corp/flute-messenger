@@ -1,0 +1,6 @@
+users:
+    type: rest
+    resource: App\Controller\UserController
+conversations:
+    type: rest
+    resource: App\Controller\ConversationController
