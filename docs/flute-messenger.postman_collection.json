@@ -1,0 +1,208 @@
+{
+	"variables": [],
+	"info": {
+		"name": "flute-messenger",
+		"_postman_id": "8b079af7-e26b-4b39-04e0-4e954f931610",
+		"description": "## Instances disponibles\n```js\nconst User = {\n  id: Number,\n  username: String,\n  token: String\n}\n```\n```js\nconst PublicUser = {\n  id: Number,\n  username: String\n}\n```\n```js\nconst Conversation = {\n  id: Number,\n  libelle: String,\n  participants: [User, /*...*/],\n  lastMessage: Message,\n}\n```\n```js\nconst Message = {\n  id: Number,\n  texte: String,\n  dateEtHeure: String   // DateTime format YYYY-MM-DD HH:mm:ss\n}\n```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user/{username}",
+			"request": {
+				"url": "{{apiUrl}}/api/user/toto",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Retourne une instance existante de `User` ou en crée une.\n\n**Il est impératif d'utiliser cette URL pour obtenir votre `token`**"
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"request": {
+				"url": "{{apiUrl}}/api/user",
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"Jean Michel\"}"
+				},
+				"description": "Soumet une requête de mise à jour du profil"
+			},
+			"response": []
+		},
+		{
+			"name": "user/find/{term}",
+			"request": {
+				"url": "{{apiUrl}}/api/user/find/to",
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":3, \"username\":\"Jean Michel\"}"
+				},
+				"description": "Soumet une requête de recherche d'un `User` par `username`"
+			},
+			"response": []
+		},
+		{
+			"name": "user/conversations",
+			"request": {
+				"url": "{{apiUrl}}/api/user/conversations",
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"participants\": [1]\n}"
+				},
+				"description": "Récupère la liste des conversations de `User`"
+			},
+			"response": []
+		},
+		{
+			"name": "conversation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const a = r;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{apiUrl}}/api/conversation",
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"participants\": [1]\n}"
+				},
+				"description": "Création d'une nouvelle conversation"
+			},
+			"response": []
+		},
+		{
+			"name": "conversation/{id}",
+			"request": {
+				"url": "{{apiUrl}}/api/conversation/20",
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"participants\": [1]\n}"
+				},
+				"description": "Récupère les 10 derniers messages d'une conversation"
+			},
+			"response": []
+		},
+		{
+			"name": "conversation/{id}/before/{id}",
+			"request": {
+				"url": "{{apiUrl}}/api/conversation/20",
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"participants\": [1]\n}"
+				},
+				"description": "Récupère jusqu'à 10 messages d'une conversation, antérieur au `Message` désigné par `idMessage`"
+			},
+			"response": []
+		},
+		{
+			"name": "conversation/{id}/message",
+			"request": {
+				"url": "{{apiUrl}}/api/conversation/20/message",
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{apiToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"texte\": \"Lama !!\"\n}"
+				},
+				"description": "Transmet un nouveau message dans une conversation"
+			},
+			"response": []
+		}
+	]
+}
