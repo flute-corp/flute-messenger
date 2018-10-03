@@ -111,7 +111,7 @@ fos_rest:
             'Symfony\Component\HttpKernel\Exception\HttpException': true
         exception_controller: 'fos_rest.exception.controller:showAction'
     service:
-        inflector: app.utils.noopinflector
+        inflector: appbundle.utils.noopinflector
 nelmio_cors:
     defaults:
         allow_credentials: false

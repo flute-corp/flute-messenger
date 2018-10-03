@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserController extends AbstractController
@@ -21,7 +24,7 @@ class UserController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('App:User')
+        $user = $em->getRepository('AppBundle:User')
             ->findOneBy(['username' => $username]);
 
         if ($user) {
@@ -60,7 +63,11 @@ class UserController extends AbstractController
             throw new UnauthorizedHttpException('Même utilisateur', 'Hey ! Vous vous croyez où là ?');
         }
 
-        $em->flush();
+        try {
+            $em->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw new ConflictHttpException('Ce pseudo est déjà utilisé');
+        }
 
         return $user;
     }

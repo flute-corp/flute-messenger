@@ -1,3 +1,5 @@
 services:
-  app.utils.noopinflector:
+  appbundle.utils.noopinflector:
     class: AppBundle\Utils\NoopInflector
+  appbundle.token_authenticator:
+    class: AppBundle\Security\TokenAuthenticator
