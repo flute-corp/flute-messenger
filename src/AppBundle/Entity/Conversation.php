@@ -57,7 +57,7 @@ class Conversation
 
         $aPart = $this->getAllParticipants();
         if (!$aPart) return 'Aucun participants';
-        return implode(', ', array_map(function (User $oUser) { return $oUser->getUsername(); }, $aPart));
+        return implode(', ', $aPart->map(function (User $oUser) { return $oUser->getUsername(); })->toArray());
     }
 
     public function setLibelle(string $libelle): self
@@ -81,10 +81,10 @@ class Conversation
      * @Serializer\Groups({"getConversation"})
      * @return Collection|null
      */
-    public function getAllParticipants(): ?array
+    public function getAllParticipants(): ?ArrayCollection
     {
-        $aPart = $this->getParticipants()->toArray();
-        array_push($aPart, $this->getCreatedBy());
+        $aPart = new ArrayCollection($this->getParticipants()->toArray());
+        $aPart->add($this->getCreatedBy());
         return $aPart;
     }
 

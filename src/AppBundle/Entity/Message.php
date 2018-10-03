@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MessageRepository")
@@ -14,11 +15,15 @@ class Message
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Serializer\Groups({"getMessage"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @Serializer\Groups({"getMessage", "postMessage"})
      */
     private $message;
 
@@ -26,6 +31,7 @@ class Message
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
+     * @Serializer\Groups({"getMessage"})
      */
     private $dateEtHeure;
 

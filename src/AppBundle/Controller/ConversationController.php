@@ -3,16 +3,28 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Conversation;
+use AppBundle\Entity\Message;
 use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class ConversationController
+class ConversationController extends FOSRestController
 {
+
+    /**
+     * @Rest\View(serializerGroups={"getMessage"})
+     * @return array
+     */
+    public function getConversationAction(Conversation $conversation)
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $em->getRepository('AppBundle:Message')->getMessagesByConversation($conversation);
+    }
 
     /**
      * @param Conversation $conversation
@@ -44,7 +56,7 @@ class ConversationController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($conversation);
-//        $em->flush();
+        $em->flush();
         return $conversation;
     }
 
@@ -81,11 +93,35 @@ class ConversationController
 
 
     /**
-     * @Rest\View()
-     * @return array
+     * @param Conversation $conv
+     * @param Message $message
+     * @return Conversation
+     *
+     * @ParamConverter(
+     *      "message",
+     *      converter="fos_rest.request_body",
+     *      options={
+     *          "deserializationContext"={
+     *              "groups"={"postMessage"}
+     *          }
+     *      }
+     *     )
+     * @Rest\View(serializerGroups={"getMessage"})
      */
-    public function getConversationAction()
+    public function postConversationMessageAction(Conversation $conv, Message $message)
     {
-        return [];
+        $oUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (!$conv->getAllParticipants()->contains($oUser)) {
+            throw new UnauthorizedHttpException(
+                'Etre dans la conversation',
+                'Vous devez faire parti de la conversation');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($conversation);
+        $em->flush();
+        return $conversation;
     }
+
 }

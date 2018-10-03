@@ -15,6 +15,21 @@ class UserController extends AbstractController
 {
 
     /**
+     * @Rest\View(serializerGroups={"getConversation"})
+     */
+    public function getUserConversationsAction() {
+        /**
+         * @var $oUser User
+         */
+        $oUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        return $em->getRepository('AppBundle:Conversation')
+            ->getConversationsByUser($oUser);
+    }
+
+    /**
      * @param $username
      * @return User|null|object
      *
