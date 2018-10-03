@@ -18,11 +18,24 @@ const User = {
   token: String
 }
 ```
+```js
+const PublicUser = {
+  id: Number,
+  username: String
+}
+```
 <h3 id="api_get_user">api/user/{username} [GET]</h3>
 
 Retourne une instance existante de `User` ou en crée une.
 
 **Il est impératif d'utiliser cette URL pour obtenir votre `token`**
+
+### api/user/find/{term} \[GET\]
+Soumet une requête de recherche d'un `User` par `username`
+#### Response
+```js
+const response = [PublicUser?, /*...*/]
+```
 
 ## Conversations
 ### Format
