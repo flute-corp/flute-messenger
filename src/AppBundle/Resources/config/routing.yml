@@ -1,0 +1,8 @@
+users:
+    type: rest
+    resource: AppBundle\Controller\UserController
+    name_prefix: api_
+conversations:
+    type: rest
+    resource: AppBundle\Controller\ConversationController
+    name_prefix: api_

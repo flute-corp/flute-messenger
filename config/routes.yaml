@@ -1,8 +1,0 @@
-api:
-    type: rest
-    resource: '../src/Resources/config/routing.yaml'
-    prefix: /api
-    name_prefix: api_
-index:
-    path: /
-    controller: App\Controller\DefaultController::index
