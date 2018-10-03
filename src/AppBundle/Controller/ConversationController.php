@@ -27,6 +27,16 @@ class ConversationController extends FOSRestController
     }
 
     /**
+     * @Rest\View(serializerGroups={"getMessage"})
+     * @return array
+     */
+    public function getConversationBeforeAction(Conversation $conversation, Message $message)
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $em->getRepository('AppBundle:Message')->getMessagesByConversation($conversation, $message);
+    }
+
+    /**
      * @param Conversation $conversation
      * @return Conversation
      *
@@ -95,7 +105,7 @@ class ConversationController extends FOSRestController
     /**
      * @param Conversation $conv
      * @param Message $message
-     * @return Conversation
+     * @return Message
      *
      * @ParamConverter(
      *      "message",
@@ -112,16 +122,22 @@ class ConversationController extends FOSRestController
     {
         $oUser = $this->get('security.token_storage')->getToken()->getUser();
 
+        if ($message->getId()) {
+            throw new BadRequestHttpException('Dit c\'est dit ! On revient pas sur sa parole !');
+        }
+
         if (!$conv->getAllParticipants()->contains($oUser)) {
             throw new UnauthorizedHttpException(
                 'Etre dans la conversation',
                 'Vous devez faire parti de la conversation');
         }
 
+        $message->setConversation($conv);
+
         $em = $this->getDoctrine()->getManager();
-        $em->persist($conversation);
+        $em->persist($message);
         $em->flush();
-        return $conversation;
+        return $message;
     }
 
 }

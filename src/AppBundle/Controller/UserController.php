@@ -30,6 +30,25 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param $term
+     * @return User|null|object
+     *
+     * @Rest\View(serializerGroups={"getUser"})
+     * @Rest\Get("user/find/{term}")
+     */
+    public function getUserFindAction($term)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        return $em->getRepository('AppBundle:User')
+            ->createQueryBuilder('user')
+            ->select()
+            ->where('user.username LIKE :term')
+            ->setParameter('term', "%$term%")
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @param $username
      * @return User|null|object
      *

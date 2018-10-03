@@ -2,6 +2,9 @@
 Pour des messages qui sonnent bien !
 
 # API Reference
+Une version PostMan de la documentation est disponible :
+https://documenter.getpostman.com/view/3275073/RWgm521F
+
 ## Authentification
 Afin d'authentifier les requêtes, vous devez utiliser un token d'API valide. Pour obetnir un token, utilisez [l'url get user](#api_get_user)
 ```javascript

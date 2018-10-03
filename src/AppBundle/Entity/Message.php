@@ -25,13 +25,14 @@ class Message
      *
      * @Serializer\Groups({"getMessage", "postMessage"})
      */
-    private $message;
+    private $texte;
 
     /**
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
      * @Serializer\Groups({"getMessage"})
+     * @Serializer\Type("DateTime<'Y-m-d H:i:s'>")
      */
     private $dateEtHeure;
 
@@ -46,14 +47,14 @@ class Message
         return $this->id;
     }
 
-    public function getMessage(): ?string
+    public function getTexte(): ?string
     {
-        return $this->message;
+        return $this->texte;
     }
 
-    public function setMessage(string $message): self
+    public function setTexte(string $texte): self
     {
-        $this->message = $message;
+        $this->texte = $texte;
 
         return $this;
     }
