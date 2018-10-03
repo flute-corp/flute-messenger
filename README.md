@@ -73,8 +73,8 @@ Récupère les 10 derniers messages d'une conversation
 const response = [Message?, /*...*/]
 ```
 
-### api/conversation/{idConversation}/{date} \[GET\]
-Récupère les 10 derniers messages d'une conversation avant `date` au format (YYYY-MM-DD HH:mm:ss)
+### api/conversation/{idConversation}/before/{idMessage} \[GET\]
+Récupère jusqu'à 10 messages d'une conversation, antérieur au `Message` désigné par `idMessage`
 #### Response
 ```js
 const response = [Message?, /*...*/]
