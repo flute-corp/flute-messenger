@@ -3,30 +3,29 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Traits\GetLoggedUser;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserController extends AbstractController
 {
 
+    use GetLoggedUser;
+
     /**
      * @Rest\View(serializerGroups={"getConversation"})
      */
     public function getUserConversationsAction() {
-        /**
-         * @var $oUser User
-         */
-        $oUser = $this->get('security.token_storage')->getToken()->getUser();
-
         $em = $this->getDoctrine()->getManager();
 
         return $em->getRepository('AppBundle:Conversation')
-            ->getConversationsByUser($oUser);
+            ->getConversationsByUser($this->_getLoggedUser());
     }
 
     /**
@@ -93,7 +92,11 @@ class UserController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('security.token_storage')->getToken()->getUser()->getId() !== $user->getId()) {
+        if (!$user->getId()) {
+            throw new BadRequestHttpException('Vous dever spécifier l\'id de l\'utilsateur');
+        }
+
+        if ($this->_getLoggedUser()->getId() !== $user->getId()) {
             throw new UnauthorizedHttpException('Même utilisateur', 'Hey ! Vous vous croyez où là ?');
         }
 

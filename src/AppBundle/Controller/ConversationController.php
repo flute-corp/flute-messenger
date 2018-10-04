@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Conversation;
 use AppBundle\Entity\Message;
-use AppBundle\Entity\User;
+use AppBundle\Traits\GetLoggedUser;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ConversationController extends FOSRestController
 {
+
+    use GetLoggedUser;
 
     /**
      * @Rest\View(serializerGroups={"getMessage"})
@@ -55,7 +57,7 @@ class ConversationController extends FOSRestController
     {
         if ($conversation->getId()) throw new BadRequestHttpException('Vous devez put pour mettre à jour');
 
-        $oUser = $this->get('security.token_storage')->getToken()->getUser();
+        $oUser = $this->_getLoggedUser();
         $aPart = $conversation->getParticipants();
         if ($aPart->contains($oUser)) {
             throw new ConflictHttpException('Vous ne pouvez pas vous désigner participant');
@@ -87,7 +89,7 @@ class ConversationController extends FOSRestController
      */
     public function putConversationAction(Conversation $conv, Conversation $conversation)
     {
-        $oUser = $this->get('security.token_storage')->getToken()->getUser();
+        $oUser = $this->_getLoggedUser();
 
         if (!$conversation->getParticipants()->contains($oUser)) {
             throw new UnauthorizedHttpException(
@@ -120,7 +122,7 @@ class ConversationController extends FOSRestController
      */
     public function postConversationMessageAction(Conversation $conv, Message $message)
     {
-        $oUser = $this->get('security.token_storage')->getToken()->getUser();
+        $oUser = $this->_getLoggedUser();
 
         if ($message->getId()) {
             throw new BadRequestHttpException('Dit c\'est dit ! On revient pas sur sa parole !');
